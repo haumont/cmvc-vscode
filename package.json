@@ -1,0 +1,120 @@
+{
+  "name": "cmvc-source-control",
+  "displayName": "CMVC Source Control",
+  "description": "A source control extension for CMVC with Git-like interface",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "SCM Providers"
+  ],
+  "activationEvents": [
+    "onCommand:cmvc.setFamily",
+    "onCommand:cmvc.setRelease",
+    "onCommand:cmvc.setDefect",
+    "onCommand:cmvc.checkin",
+    "onCommand:cmvc.checkout",
+    "onCommand:cmvc.view"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cmvc.setFamily",
+        "title": "Set Family",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.setRelease",
+        "title": "Set Release",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.setDefect",
+        "title": "Set Defect",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.checkin",
+        "title": "Checkin",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.checkout",
+        "title": "Checkout",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.view",
+        "title": "View",
+        "category": "CMVC"
+      }
+    ],
+
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cmvc",
+          "title": "CMVC",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "cmvc": [
+        {
+          "id": "cmvcExplorer",
+          "name": "CMVC Explorer",
+          "when": "true"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "cmvc.setFamily",
+          "when": "view == cmvcExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "cmvc.setRelease",
+          "when": "view == cmvcExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "cmvc.setDefect",
+          "when": "view == cmvcExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cmvc.checkin",
+          "when": "view == cmvcExplorer && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "cmvc.checkout",
+          "when": "view == cmvcExplorer && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "cmvc.view",
+          "when": "view == cmvcExplorer && viewItem == file",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+} 
