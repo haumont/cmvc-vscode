@@ -199,12 +199,9 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
                         this.getFilesRecursively(fullPath, items, rootPath);
                     }
                 } else {
-                    // Only include certain file types
-                    const ext = path.extname(file).toLowerCase();
-                    if (['.js', '.ts', '.jsx', '.tsx', '.json', '.md', '.txt', '.html', '.css', '.scss'].includes(ext)) {
-                        const relativePath = path.relative(rootPath, fullPath);
-                        items.push(new FileItem(file, fullPath, relativePath));
-                    }
+                    // Include all files - let the user decide which ones to work with
+                    const relativePath = path.relative(rootPath, fullPath);
+                    items.push(new FileItem(file, fullPath, relativePath));
                 }
             }
         } catch (error) {
