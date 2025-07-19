@@ -418,6 +418,42 @@ export function activate(context: vscode.ExtensionContext) {
             if (item && item.resourceUri) {
                 cmvcService.view(item.resourceUri.fsPath);
             }
+        }),
+
+        vscode.commands.registerCommand('cmvc.checkinFile', (item: FileItem) => {
+            if (item && item.resourceUri) {
+                cmvcService.checkin(item.resourceUri.fsPath);
+            }
+        }),
+
+        vscode.commands.registerCommand('cmvc.checkoutFile', (item: FileItem) => {
+            if (item && item.resourceUri) {
+                cmvcService.checkout(item.resourceUri.fsPath);
+            }
+        }),
+
+        vscode.commands.registerCommand('cmvc.viewFile', (item: FileItem) => {
+            if (item && item.resourceUri) {
+                cmvcService.view(item.resourceUri.fsPath);
+            }
+        }),
+
+        vscode.commands.registerCommand('cmvc.checkinInline', (item: FileItem) => {
+            if (item && item.resourceUri) {
+                cmvcService.checkin(item.resourceUri.fsPath);
+            }
+        }),
+
+        vscode.commands.registerCommand('cmvc.checkoutInline', (item: FileItem) => {
+            if (item && item.resourceUri) {
+                cmvcService.checkout(item.resourceUri.fsPath);
+            }
+        }),
+
+        vscode.commands.registerCommand('cmvc.viewInline', (item: FileItem) => {
+            if (item && item.resourceUri) {
+                cmvcService.view(item.resourceUri.fsPath);
+            }
         })
     );
 }

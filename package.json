@@ -49,6 +49,36 @@
         "command": "cmvc.view",
         "title": "View",
         "category": "CMVC"
+      },
+      {
+        "command": "cmvc.checkinFile",
+        "title": "Checkin File",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.checkoutFile",
+        "title": "Checkout File",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.viewFile",
+        "title": "View File",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.checkinInline",
+        "title": "↑",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.checkoutInline",
+        "title": "↓",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.viewInline",
+        "title": "V",
+        "category": "CMVC"
       }
     ],
 
@@ -92,15 +122,30 @@
         {
           "command": "cmvc.checkin",
           "when": "view == cmvcExplorer && viewItem == file",
-          "group": "inline"
+          "group": "1_modification"
         },
         {
           "command": "cmvc.checkout",
           "when": "view == cmvcExplorer && viewItem == file",
-          "group": "inline"
+          "group": "1_modification"
         },
         {
           "command": "cmvc.view",
+          "when": "view == cmvcExplorer && viewItem == file",
+          "group": "1_modification"
+        },
+        {
+          "command": "cmvc.checkinInline",
+          "when": "view == cmvcExplorer && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "cmvc.checkoutInline",
+          "when": "view == cmvcExplorer && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "cmvc.viewInline",
           "when": "view == cmvcExplorer && viewItem == file",
           "group": "inline"
         }
