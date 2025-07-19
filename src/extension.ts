@@ -128,13 +128,45 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
     readonly onDidChangeTreeData: vscode.Event<CMVCExplorerItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private cmvcService: CMVCService;
+    private fileSystemWatcher: vscode.FileSystemWatcher | undefined;
 
     constructor(cmvcService: CMVCService) {
         this.cmvcService = cmvcService;
+        this.setupFileSystemWatcher();
+    }
+
+    private setupFileSystemWatcher() {
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        if (!workspaceFolder) {
+            return;
+        }
+
+        // Watch for file system changes
+        this.fileSystemWatcher = vscode.workspace.createFileSystemWatcher(
+            new vscode.RelativePattern(workspaceFolder, '**/*')
+        );
+
+        this.fileSystemWatcher.onDidCreate(() => {
+            this.refresh();
+        });
+
+        this.fileSystemWatcher.onDidDelete(() => {
+            this.refresh();
+        });
+
+        this.fileSystemWatcher.onDidChange(() => {
+            this.refresh();
+        });
     }
 
     refresh() {
         this._onDidChangeTreeData.fire();
+    }
+
+    dispose() {
+        if (this.fileSystemWatcher) {
+            this.fileSystemWatcher.dispose();
+        }
     }
 
     getTreeItem(element: CMVCExplorerItem): vscode.TreeItem {
@@ -161,7 +193,11 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
         }
 
         if (element instanceof FileExplorerItem) {
-            return this.getFiles();
+            return this.getWorkspaceFiles();
+        }
+
+        if (element instanceof FolderItem) {
+            return this.getFolderContents(element.resourceUri.fsPath);
         }
 
         if (element instanceof TrackSectionItem) {
@@ -173,20 +209,31 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
         return Promise.resolve([]);
     }
 
-    private async getFiles(): Promise<CMVCExplorerItem[]> {
+    private async getWorkspaceFiles(): Promise<CMVCExplorerItem[]> {
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
         if (!workspaceFolder) {
             return [];
         }
 
-        const files: CMVCExplorerItem[] = [];
-        this.getFilesRecursively(workspaceFolder.uri.fsPath, files, workspaceFolder.uri.fsPath);
-        return files;
+        const items: CMVCExplorerItem[] = [];
+        this.getDirectoryContents(workspaceFolder.uri.fsPath, items);
+        return items;
     }
 
-    private getFilesRecursively(dirPath: string, items: CMVCExplorerItem[], rootPath: string) {
+    private async getFolderContents(folderPath: string): Promise<CMVCExplorerItem[]> {
+        const items: CMVCExplorerItem[] = [];
+        this.getDirectoryContents(folderPath, items);
+        return items;
+    }
+
+    private getDirectoryContents(dirPath: string, items: CMVCExplorerItem[]) {
         try {
             const files = fs.readdirSync(dirPath);
+            
+            // Separate directories and files
+            const directories: string[] = [];
+            const filesList: string[] = [];
+            
             for (const file of files) {
                 const fullPath = path.join(dirPath, file);
                 const stat = fs.statSync(fullPath);
@@ -194,15 +241,28 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
                 if (stat.isDirectory()) {
                     // Skip node_modules and .git directories
                     if (file !== 'node_modules' && file !== '.git' && !file.startsWith('.')) {
-                        const folderItem = new FolderItem(file, fullPath);
-                        items.push(folderItem);
-                        this.getFilesRecursively(fullPath, items, rootPath);
+                        directories.push(file);
                     }
                 } else {
-                    // Include all files - let the user decide which ones to work with
-                    const relativePath = path.relative(rootPath, fullPath);
-                    items.push(new FileItem(file, fullPath, relativePath));
+                    filesList.push(file);
                 }
+            }
+            
+            // Sort directories and files alphabetically
+            directories.sort();
+            filesList.sort();
+            
+            // Add directories first
+            for (const dir of directories) {
+                const fullPath = path.join(dirPath, dir);
+                items.push(new FolderItem(dir, fullPath));
+            }
+            
+            // Add files
+            for (const file of filesList) {
+                const fullPath = path.join(dirPath, file);
+                const relativePath = path.relative(vscode.workspace.workspaceFolders![0].uri.fsPath, fullPath);
+                items.push(new FileItem(file, fullPath, relativePath));
             }
         } catch (error) {
             console.error('Error reading directory:', error);
@@ -362,4 +422,8 @@ export function activate(context: vscode.ExtensionContext) {
     );
 }
 
-export function deactivate() {} 
+export function deactivate() {
+    if (cmvcExplorerProvider) {
+        cmvcExplorerProvider.dispose();
+    }
+} 

@@ -6,7 +6,7 @@ A VSCode extension that provides a Git-like interface for CMVC (Configuration Ma
 
 - **Configuration Management**: Set Family, Release, and Defect values that are used throughout the extension
 - **File Operations**: Checkin, Checkout, and View files using CMVC commands
-- **File Explorer**: Browse all files in the current workspace with context menu operations
+- **File Explorer**: Browse all files in the current workspace with tree structure and real-time updates
 - **Track View**: Placeholder for future track functionality
 
 ## Installation
@@ -26,11 +26,14 @@ A VSCode extension that provides a Git-like interface for CMVC (Configuration Ma
 
 ### File Operations
 
-1. Right-click on any file in the file explorer
-2. Choose from the following options:
+1. Browse files in the tree structure - directories can be expanded/collapsed
+2. Right-click on any file in the file explorer
+3. Choose from the following options:
    - **Checkin**: Check in the file with current Family, Release, and Defect values
    - **Checkout**: Check out the file with current Family, Release, and Defect values
    - **View**: View the file contents using CMVC view command
+
+**Note**: The file explorer automatically updates when files or directories are added, removed, or modified in the workspace.
 
 ### Commands
 
