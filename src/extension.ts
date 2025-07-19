@@ -18,24 +18,24 @@ class CMVCService {
         release: '',
         defect: ''
     };
+    private context: vscode.ExtensionContext;
 
-    constructor() {
+    constructor(context: vscode.ExtensionContext) {
+        this.context = context;
         // Load saved configuration
         this.loadConfig();
     }
 
     private loadConfig() {
-        const workspaceConfig = vscode.workspace.getConfiguration('cmvc');
-        this.config.family = workspaceConfig.get('family', '');
-        this.config.release = workspaceConfig.get('release', '');
-        this.config.defect = workspaceConfig.get('defect', '');
+        this.config.family = this.context.workspaceState.get('cmvc.family', '');
+        this.config.release = this.context.workspaceState.get('cmvc.release', '');
+        this.config.defect = this.context.workspaceState.get('cmvc.defect', '');
     }
 
     private saveConfig() {
-        const workspaceConfig = vscode.workspace.getConfiguration('cmvc');
-        workspaceConfig.update('family', this.config.family, vscode.ConfigurationTarget.Workspace);
-        workspaceConfig.update('release', this.config.release, vscode.ConfigurationTarget.Workspace);
-        workspaceConfig.update('defect', this.config.defect, vscode.ConfigurationTarget.Workspace);
+        this.context.workspaceState.update('cmvc.family', this.config.family);
+        this.context.workspaceState.update('cmvc.release', this.config.release);
+        this.context.workspaceState.update('cmvc.defect', this.config.defect);
     }
 
     getConfig(): CMVCConfig {
@@ -361,7 +361,7 @@ let cmvcExplorerProvider: CMVCExplorerProvider;
 
 export function activate(context: vscode.ExtensionContext) {
     // Initialize CMVC service
-    cmvcService = new CMVCService();
+    cmvcService = new CMVCService(context);
 
     // Register tree data provider
     cmvcExplorerProvider = new CMVCExplorerProvider(cmvcService);

@@ -82,11 +82,19 @@ make rebuild         # Quick rebuild during development
 
 ## Configuration
 
-The extension stores configuration values in the workspace settings under the `cmvc` namespace:
+The extension stores configuration values in the workspace session state:
 
-- `cmvc.family`: The Family value
-- `cmvc.release`: The Release value  
-- `cmvc.defect`: The Defect value
+- **Family**: The Family value for CMVC operations
+- **Release**: The Release value for CMVC operations  
+- **Defect**: The Defect value for CMVC operations
+
+### Session-Based Storage
+
+Configuration values are automatically saved and restored for each workspace:
+- ✅ **Remembered**: Values persist when reopening the same folder
+- ✅ **Workspace-Specific**: Each folder maintains its own configuration
+- ✅ **Temporary**: Values are not remembered when no folder is open
+- ✅ **Clean**: Values are cleared when the workspace is closed
 
 ## Packaging
 
