@@ -3,6 +3,14 @@
   "displayName": "CMVC Source Control",
   "description": "A source control extension for CMVC with Git-like interface",
   "version": "0.0.1",
+  "author": {
+    "name": "Jeff Haumont",
+    "email": "haumont@acm.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/private/cmvc-vscode-extension.git"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
