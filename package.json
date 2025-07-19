@@ -17,14 +17,6 @@
   "categories": [
     "SCM Providers"
   ],
-  "activationEvents": [
-    "onCommand:cmvc.setFamily",
-    "onCommand:cmvc.setRelease",
-    "onCommand:cmvc.setDefect",
-    "onCommand:cmvc.checkin",
-    "onCommand:cmvc.checkout",
-    "onCommand:cmvc.view"
-  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
