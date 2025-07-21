@@ -439,6 +439,36 @@ export function activate(context: vscode.ExtensionContext) {
             if (item && item.resourceUri) {
                 cmvcService.view(item.resourceUri.fsPath);
             }
+        }),
+        vscode.commands.registerCommand('cmvc.create', async (item: FileItem) => {
+            if (!item || !item.resourceUri) {
+                vscode.window.showErrorMessage('No file selected for creation.');
+                return;
+            }
+            const context = cmvcService['context'];
+            const lastComponent = context.workspaceState.get<string>('cmvc.lastComponent', '');
+            const component = await vscode.window.showInputBox({
+                prompt: 'Enter Component',
+                value: lastComponent
+            });
+            if (!component) {
+                vscode.window.showErrorMessage('Component is required.');
+                return;
+            }
+            context.workspaceState.update('cmvc.lastComponent', component);
+            const config = cmvcService.getConfig();
+            const command = `File -create "${item.resourceUri.fsPath}" -component "${component}" -defect "${config.defect}" -release "${config.release}" -family "${config.family}"`;
+            try {
+                const { stdout, stderr } = await execAsync(command);
+                if (stderr) {
+                    vscode.window.showErrorMessage(`Create failed: ${stderr}`);
+                } else {
+                    vscode.window.showInformationMessage(`Successfully created: ${item.resourceUri.fsPath}`);
+                    cmvcFilesProvider.refresh();
+                }
+            } catch (error) {
+                vscode.window.showErrorMessage(`Create failed: ${error}`);
+            }
         })
     );
 }

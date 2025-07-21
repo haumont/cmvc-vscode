@@ -79,6 +79,11 @@
         "command": "cmvc.viewInline",
         "title": "V",
         "category": "CMVC"
+      },
+      {
+        "command": "cmvc.create",
+        "title": "Create",
+        "category": "CMVC"
       }
     ],
 
@@ -129,6 +134,11 @@
         }
       ],
       "view/item/context": [
+        {
+          "command": "cmvc.create",
+          "when": "view == cmvcFiles && viewItem == file",
+          "group": "0_create"
+        },
         {
           "command": "cmvc.checkin",
           "when": "view == cmvcFiles && viewItem == file",
