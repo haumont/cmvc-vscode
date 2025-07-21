@@ -137,4 +137,4 @@ check:
 		echo "Error: Extension not built. Run 'make build' first"; \
 		exit 1; \
 	fi
-	@echo "Extension is ready for packaging." 
+	@echo "Extension is ready for packaging."

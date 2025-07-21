@@ -66,7 +66,7 @@ class CMVCService {
         try {
             const command = `File -checkin "${filePath}" -defect "${this.config.defect}" -release "${this.config.release}" -family "${this.config.family}"`;
             const { stdout, stderr } = await execAsync(command);
-            
+
             if (stderr) {
                 vscode.window.showErrorMessage(`Checkin failed: ${stderr}`);
             } else {
@@ -86,7 +86,7 @@ class CMVCService {
         try {
             const command = `File -checkout "${filePath}" -defect "${this.config.defect}" -release "${this.config.release}" -family "${this.config.family}"`;
             const { stdout, stderr } = await execAsync(command);
-            
+
             if (stderr) {
                 vscode.window.showErrorMessage(`Checkout failed: ${stderr}`);
             } else {
@@ -106,7 +106,7 @@ class CMVCService {
         try {
             const command = `File -view "${filePath}" -release "${this.config.release}" -family "${this.config.family}"`;
             const { stdout, stderr } = await execAsync(command);
-            
+
             if (stderr) {
                 vscode.window.showErrorMessage(`View failed: ${stderr}`);
             } else {
@@ -229,15 +229,15 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
     private getDirectoryContents(dirPath: string, items: CMVCExplorerItem[]) {
         try {
             const files = fs.readdirSync(dirPath);
-            
+
             // Separate directories and files
             const directories: string[] = [];
             const filesList: string[] = [];
-            
+
             for (const file of files) {
                 const fullPath = path.join(dirPath, file);
                 const stat = fs.statSync(fullPath);
-                
+
                 if (stat.isDirectory()) {
                     // Skip node_modules and .git directories
                     if (file !== 'node_modules' && file !== '.git' && !file.startsWith('.')) {
@@ -247,17 +247,17 @@ class CMVCExplorerProvider implements vscode.TreeDataProvider<CMVCExplorerItem> 
                     filesList.push(file);
                 }
             }
-            
+
             // Sort directories and files alphabetically
             directories.sort();
             filesList.sort();
-            
+
             // Add directories first
             for (const dir of directories) {
                 const fullPath = path.join(dirPath, dir);
                 items.push(new FolderItem(dir, fullPath));
             }
-            
+
             // Add files
             for (const file of filesList) {
                 const fullPath = path.join(dirPath, file);
@@ -281,7 +281,7 @@ abstract class CMVCExplorerItem extends vscode.TreeItem {
 
 class ConfigSectionItem extends CMVCExplorerItem {
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string) {
         super(label, vscode.TreeItemCollapsibleState.Expanded);
         this.iconPath = new vscode.ThemeIcon('gear');
@@ -291,7 +291,7 @@ class ConfigSectionItem extends CMVCExplorerItem {
 class ConfigItem extends CMVCExplorerItem {
     public command: vscode.Command;
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string, value: string, command: string) {
         super(`${label}: ${value || 'Not set'}`, vscode.TreeItemCollapsibleState.None);
         this.command = {
@@ -305,7 +305,7 @@ class ConfigItem extends CMVCExplorerItem {
 
 class FileExplorerItem extends CMVCExplorerItem {
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string) {
         super(label, vscode.TreeItemCollapsibleState.Expanded);
         this.iconPath = new vscode.ThemeIcon('files');
@@ -317,7 +317,7 @@ class FileItem extends CMVCExplorerItem {
     public resourceUri: vscode.Uri;
     public contextValue: string;
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string, fullPath: string, relativePath: string) {
         super(label, vscode.TreeItemCollapsibleState.None);
         this.tooltip = relativePath;
@@ -330,7 +330,7 @@ class FileItem extends CMVCExplorerItem {
 class FolderItem extends CMVCExplorerItem {
     public resourceUri: vscode.Uri;
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string, fullPath: string) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.resourceUri = vscode.Uri.file(fullPath);
@@ -340,7 +340,7 @@ class FolderItem extends CMVCExplorerItem {
 
 class TrackSectionItem extends CMVCExplorerItem {
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string) {
         super(label, vscode.TreeItemCollapsibleState.Expanded);
         this.iconPath = new vscode.ThemeIcon('timeline');
@@ -349,7 +349,7 @@ class TrackSectionItem extends CMVCExplorerItem {
 
 class TrackItem extends CMVCExplorerItem {
     public iconPath: vscode.ThemeIcon;
-    
+
     constructor(label: string) {
         super(label, vscode.TreeItemCollapsibleState.None);
         this.iconPath = new vscode.ThemeIcon('info');
@@ -462,4 +462,4 @@ export function deactivate() {
     if (cmvcExplorerProvider) {
         cmvcExplorerProvider.dispose();
     }
-} 
+}
