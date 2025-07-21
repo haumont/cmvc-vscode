@@ -10,6 +10,7 @@ src/**/*.js.map
 # Include build output and distribution directories
 !out/**
 !dist/**
+!README.md
 !LICENSE.md
 !resources/**
 
@@ -27,9 +28,6 @@ Makefile
 .gitignore
 .vscode/**
 .vscode-test/**
-
-# Exclude docs and resources not needed in the package
-README.md
 
 # Exclude other common unnecessary files
 *.vsix
