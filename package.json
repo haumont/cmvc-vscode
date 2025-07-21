@@ -7,6 +7,7 @@
     "name": "Jeff Haumont",
     "email": "haumont@acm.org"
   },
+  "publisher": "haumont",
   "repository": {
     "type": "git",
     "url": "https://github.com/haumont/cmvc-vscode.git"
@@ -83,6 +84,11 @@
       {
         "command": "cmvc.create",
         "title": "Create",
+        "category": "CMVC"
+      },
+      {
+        "command": "cmvc.about",
+        "title": "About CMVC Source Control",
         "category": "CMVC"
       }
     ],

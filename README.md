@@ -1,5 +1,7 @@
 # CMVC Source Control Extension
 
+![CMVC Logo](resources/cmvc.png) 
+
 A VSCode extension that provides a Git-like interface for CMVC (Configuration Management Version Control) operations.
 
 ## Features

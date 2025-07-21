@@ -484,6 +484,26 @@ export function activate(context: vscode.ExtensionContext) {
             } catch (error) {
                 vscode.window.showErrorMessage(`Create failed: ${error}`);
             }
+        }),
+        vscode.commands.registerCommand('cmvc.about', async () => {
+            const panel = vscode.window.createWebviewPanel(
+                'cmvcAbout',
+                'About CMVC Source Control',
+                vscode.ViewColumn.One,
+                { enableScripts: false }
+            );
+            const iconUri = vscode.Uri.joinPath(context.extensionUri, 'resources', 'cmvc.png');
+            panel.webview.html = `
+                <html>
+                <body style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-family:sans-serif;">
+                    <img src="${panel.webview.asWebviewUri(iconUri)}" width="128" height="128" alt="CMVC" style="margin-top:2em;" />
+                    <h1>CMVC Source Control</h1>
+                    <p>Version: ${require('../package.json').version}</p>
+                    <p>Publisher: haumont</p>
+                    <p>A source control extension for CMVC with Git-like interface.</p>
+                </body>
+                </html>
+            `;
         })
     );
 }
