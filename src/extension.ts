@@ -64,7 +64,7 @@ class CMVCService {
         }
 
         try {
-            const command = `File -checkin "${filePath}" -defect "${this.config.defect}" -release "${this.config.release}" -family "${this.config.family}"`;
+            const command = `File -checkin "${getRelativePath(filePath)}" -defect "${this.config.defect}" -release "${this.config.release}" -family "${this.config.family}"`;
             const { stdout, stderr } = await execAsync(command);
 
             if (stderr) {
@@ -84,7 +84,7 @@ class CMVCService {
         }
 
         try {
-            const command = `File -checkout "${filePath}" -defect "${this.config.defect}" -release "${this.config.release}" -family "${this.config.family}"`;
+            const command = `File -checkout "${getRelativePath(filePath)}" -defect "${this.config.defect}" -release "${this.config.release}" -family "${this.config.family}"`;
             const { stdout, stderr } = await execAsync(command);
 
             if (stderr) {
@@ -104,7 +104,7 @@ class CMVCService {
         }
 
         try {
-            const command = `File -view "${filePath}" -release "${this.config.release}" -family "${this.config.family}"`;
+            const command = `File -view "${getRelativePath(filePath)}" -release "${this.config.release}" -family "${this.config.family}"`;
             const { stdout, stderr } = await execAsync(command);
 
             if (stderr) {
@@ -351,6 +351,21 @@ let cmvcConfigProvider: CMVCConfigProvider;
 let cmvcFilesProvider: CMVCFilesProvider;
 let cmvcTrackProvider: CMVCTrackProvider;
 
+// Utility function to get relative path to GITROOT or workspace root
+function getRelativePath(fsPath: string): string {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders || workspaceFolders.length === 0) return fsPath;
+    const workspaceRoot = workspaceFolders[0].uri.fsPath;
+    let gitRoot = workspaceRoot;
+    try {
+        const gitRootResult = require('child_process').execSync('git rev-parse --show-toplevel', { cwd: workspaceRoot });
+        gitRoot = gitRootResult.toString().trim();
+    } catch (e) {
+        // Not a git repo, fallback to workspace root
+    }
+    return path.relative(gitRoot, fsPath);
+}
+
 export function activate(context: vscode.ExtensionContext) {
     // Initialize CMVC service
     cmvcService = new CMVCService(context);
@@ -457,7 +472,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
             context.workspaceState.update('cmvc.lastComponent', component);
             const config = cmvcService.getConfig();
-            const command = `File -create "${item.resourceUri.fsPath}" -component "${component}" -defect "${config.defect}" -release "${config.release}" -family "${config.family}"`;
+            const command = `File -create "${getRelativePath(item.resourceUri.fsPath)}" -component "${component}" -defect "${config.defect}" -release "${config.release}" -family "${config.family}"`;
             try {
                 const { stdout, stderr } = await execAsync(command);
                 if (stderr) {
