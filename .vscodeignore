@@ -1,0 +1,38 @@
+# Exclude node_modules except for production dependencies
+node_modules/**
+!node_modules/vscode/**
+
+# Exclude TypeScript source files
+src/**/*.ts
+src/**/*.tsx
+src/**/*.js.map
+
+# Include build output and distribution directories
+!out/**
+!dist/**
+!LICENSE.md
+!resources/**
+
+# Exclude test files
+*.test.*
+*.spec.*
+test/**
+
+# Exclude build scripts and configs
+Makefile
+*.tsbuildinfo
+
+# Exclude version control and misc
+.git/**
+.gitignore
+.vscode/**
+.vscode-test/**
+
+# Exclude docs and resources not needed in the package
+README.md
+
+# Exclude other common unnecessary files
+*.vsix
+*.log
+*.map
+*.txt 
