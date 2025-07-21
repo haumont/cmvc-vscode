@@ -94,8 +94,18 @@
     "views": {
       "cmvc": [
         {
-          "id": "cmvcExplorer",
-          "name": "CMVC Explorer",
+          "id": "cmvcConfig",
+          "name": "Configuration",
+          "when": "true"
+        },
+        {
+          "id": "cmvcFiles",
+          "name": "Files",
+          "when": "true"
+        },
+        {
+          "id": "cmvcTrack",
+          "name": "Track",
           "when": "true"
         }
       ]
@@ -121,32 +131,32 @@
       "view/item/context": [
         {
           "command": "cmvc.checkin",
-          "when": "view == cmvcExplorer && viewItem == file",
+          "when": "view == cmvcFiles && viewItem == file",
           "group": "1_modification"
         },
         {
           "command": "cmvc.checkout",
-          "when": "view == cmvcExplorer && viewItem == file",
+          "when": "view == cmvcFiles && viewItem == file",
           "group": "1_modification"
         },
         {
           "command": "cmvc.view",
-          "when": "view == cmvcExplorer && viewItem == file",
+          "when": "view == cmvcFiles && viewItem == file",
           "group": "1_modification"
         },
         {
           "command": "cmvc.checkinInline",
-          "when": "view == cmvcExplorer && viewItem == file",
+          "when": "view == cmvcFiles && viewItem == file",
           "group": "inline"
         },
         {
           "command": "cmvc.checkoutInline",
-          "when": "view == cmvcExplorer && viewItem == file",
+          "when": "view == cmvcFiles && viewItem == file",
           "group": "inline"
         },
         {
           "command": "cmvc.viewInline",
-          "when": "view == cmvcExplorer && viewItem == file",
+          "when": "view == cmvcFiles && viewItem == file",
           "group": "inline"
         }
       ]
